@@ -42,7 +42,7 @@ def menu():
         print("Server Reply Code: " + BColors.FAIL + str(box_list[u"code"]) + BColors.ENDC + '\n Expected "OK"')
         sys.exit(-1)
     if box_list[u"type"] != "RESULT":
-        print("Server Reply Type: " + BColor.FAIL + str(box_list[u"type"]) + BColors.ENDC + '\n Expected "RESULT"')
+        print("Server Reply Type: " + BColors.FAIL + str(box_list[u"type"]) + BColors.ENDC + '\n Expected "RESULT"')
         sys.exit(-1)
 
     box_names = []
@@ -51,13 +51,13 @@ def menu():
     box_names = u', '.join(box_names).encode('utf-8').strip()
     print(BColors.BOLD + "Existing Boxes:\n" + BColors.ENDC + box_names + "\n")
     print(BColors.BOLD + "Number of Boxes: " + BColors.ENDC + str(get_box_number(box_list)))
-    print(get_box_index(u"Filipe", box_list))
+    print(get_box_index(u"abc", box_list))
 
 
 # Server functions
-def get_box_msg_number(box_name, box_list, box_names):
+def get_box_msg_number(box_name, box_list):
 
-    return box_list[u"payload"][box_number][u"size"]
+    return box_list[u"payload"][get_box_index(box_name, box_list)][u"size"]
 
 
 def get_box_index(box_name, box_list):
@@ -95,14 +95,14 @@ class PBoxClient(object):
 
 class Actions(object):
     @cherrypy.expose
-    def doLogin(self, username=None, password=None):
+    def doListBoxes(self):
         print("PBox Client v" + app_version + "\n")
         box_list = get_box_list(tgt_server[0], tgt_server[1])
         if box_list[u"code"] != "OK":
             print("Server Reply Code: " + BColors.FAIL + str(box_list[u"code"]) + BColors.ENDC + '\n Expected "OK"')
             sys.exit(-1)
         if box_list[u"type"] != "RESULT":
-            print("Server Reply Type: " + BColor.FAIL + str(box_list[u"type"]) + BColors.ENDC + '\n Expected "RESULT"')
+            print("Server Reply Type: " + BColors.FAIL + str(box_list[u"type"]) + BColors.ENDC + '\n Expected "RESULT"')
             sys.exit(-1)
 
         box_names = []
@@ -111,9 +111,9 @@ class Actions(object):
         box_names = u', '.join(box_names).encode('utf-8').strip()
         print(BColors.BOLD + "Existing Boxes:\n" + BColors.ENDC + box_names + "\n")
         print(BColors.BOLD + "Number of Boxes: " + BColors.ENDC + str(get_box_number(box_list)))
-        print(get_box_index(u"Filipe", box_list))
+        print(get_box_index(u"abc", box_list))
         return box_names
 
-cherrypy.quickstart(PBoxClient())
+# cherrypy.quickstart(PBoxClient())
 
-# menu()
+menu()
