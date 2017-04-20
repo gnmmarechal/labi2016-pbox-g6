@@ -2,7 +2,7 @@
 import time
 
 
-def recvall(sock):  # Receives all of the data (until it stops on a timeout)
+def recv_all(sock):  # Receives all of the data (until it stops on a timeout)
     sock.setblocking(0)
     data_array = []
     data = ""
