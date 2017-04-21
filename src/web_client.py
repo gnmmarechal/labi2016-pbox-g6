@@ -48,7 +48,25 @@ class PBoxClientWeb(object):
         retval = index + '<H1>Read Messages</H1><form action="read_all" method="post"> Box Name: <input type="text" name="box_name" value=""> <p><input type="submit" value="Read"/></p> </form> </BODY> </HTML>'
         return retval
 
+    @cherrypy.expose()
+    def put_msg(selfs):
+        retval = index + '<H1>Send Message</H1><form action="send" method="post"> Box Name: <input type="text" name="box_name" value=""> <BR><BR>Message: <input type="text" name="message" maxlength="65536" value=""> <p><input type="submit" value="Send"/></p> </form> </BODY> </HTML>'
+        return retval
+
     # Called by Input
+    @cherrypy.expose()
+    def send(self, box_name="", message=""):
+        if box_name.strip() == "" or message.strip() == "":
+            return '<meta http-equiv="refresh" content="0; url=http://127.0.0.1:8080/put_msg" />'
+        else:
+            retval = index + "<H1>Message Sending</H1>"
+            retcode = client.put_message(box_name.strip(), message.strip(), client.tgt_server)
+            if retcode == 0:
+                retval += '<P>Message sent successfully!</P>'
+            else:
+                retval += '<P>Message sending failure!</P>'
+            return retval
+
     @cherrypy.expose()
     def read_all(self, box_name=""):
         if box_name.strip() == "":
