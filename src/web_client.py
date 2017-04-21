@@ -1,9 +1,19 @@
 #!/usr/bin/env python
 import cherrypy
 import client
+import re
 
 web_app_version = "0.1.0"
 index = open("resources/index.html", "r").read()
+
+
+def escape_ansi(lines):
+    i = 0
+    while i < len(lines):
+        ansi_escape = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]')
+        lines[i] = ansi_escape.sub('', lines[i])
+        i += 1
+    return lines
 
 
 # CherryPy Part of PBoxClient
@@ -33,7 +43,23 @@ class PBoxClientWeb(object):
         retval = index + '<H1>Delete All Messages</H1><form action="delete_all" method="post"> Box Name: <input type="text" name="box_name" value=""> <p><input type="submit" value="Delete"/></p> </form> </BODY> </HTML>'
         return retval
 
+    @cherrypy.expose()
+    def read_msgs(self):
+        retval = index + '<H1>Read Messages</H1><form action="read_all" method="post"> Box Name: <input type="text" name="box_name" value=""> <p><input type="submit" value="Read"/></p> </form> </BODY> </HTML>'
+        return retval
+
     # Called by Input
+    @cherrypy.expose()
+    def read_all(self, box_name=""):
+        if box_name.strip() == "":
+            return '<meta http-equiv="refresh" content="0; url=http://127.0.0.1:8080/delete_msgs" />'
+        else:
+            retval = index + "<H1>Messages</H1>"
+            retcode = client.get_messages(box_name.strip(), client.tgt_server)
+            retcode = escape_ansi(retcode)
+            retval += "<textarea name=\"Message List\" cols=\"200\" rows=\"30\" readonly>" + client.prettyfy(retcode, "\n") + "</textarea> </BODY> </HTML>"
+            return retval
+
     @cherrypy.expose()
     def delete_all(self, box_name=""):
         if box_name.strip() == "":
