@@ -32,6 +32,8 @@ class PBoxClientWeb(object):
             retcode = client.create_box(box_name.strip(), client.tgt_server)
             if retcode == "OK":
                 retval += '<P>Creation of box "' + box_name.strip() + '" successful!</P>'
+            elif retcode == "ERR_EXISTS":
+                retval += '<P>Creation of box "' + box_name.strip() + '" unsuccessful! Box already exists!</P>'
             else:
                 retval += '<P>Creation of box "' + box_name.strip() + '" unsuccessful!</P>'
             return retval
