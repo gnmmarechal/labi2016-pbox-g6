@@ -56,14 +56,17 @@ def menu():
 
 
 # Server functions
-def create_box(box_name, server_address, server_port):
+def create_box(box_name, server_address, server_port, pubk=False, sig=False):  # Creates a box, optional with security
+    # SECURITY NOT IMPLEMENTED
     msg = '{ "type": "CREATE", "name": "' + box_name + '", "timestamp":' + str(int(time.time())) + ' }\r\n'
+    if not pubk or not sig:
+        msg = "{}"  # Not implemented
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((server_address, server_port))
     sock.send(msg.encode())
     reply = net_funcs.recv_all(sock).decode()
     sock.close()
-    # dic_reply = json.loads(reply)
+    dic_reply = json.loads(reply)
     print reply
 
 
