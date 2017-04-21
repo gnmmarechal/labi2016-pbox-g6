@@ -90,15 +90,15 @@ Resumo do trabalho..............................................................
 \pagenumbering{arabic} %Numeracao fica a direita
 %
 \chapter{Introdução}
-\label{chap.introducao} %ADD AUTO REFS para CRIAR, LISTAR, ENVIAR e RECEBER
+\label{chap.introducao} 
 
 O tema do seguinte trabalho é a criação de um programa cliente onde é possível realizar certas operações envolvendo a interação com um servidor.
 Este servidor contém um modelo de "boxes" com (ou sem) segurança onde é possível deixar mensagens de curto comprimento para consulta do seu criador. Todos os utilizadores têm possibilidade de criar uma \textbf{caixa} com um certo nome, também sendo possível existir uma chave pública ao servidor (no caso das caixas seguras). Além da criação de caixas, é possível \textbf{listar},\textbf{receber} e \textbf{enviar} mensagens para uma certa caixa.
 
-O documento encontra-se dividido em cinco capítulos.
+O documento encontra-se dividido em quatro capítulos.
 Sendo que no \autoref{chap.metodologia} é apresentada a metodologia seguida para a criação do cliente e
 as funções do mesmo.
-No \autoref{chap.resultados} são apresentados os resultados btidos no cliente e na \autoref{chap.analise} a análise dos resultados.
+No \autoref{chap.resultados} são apresentados os resultados obtidos no cliente e a respetiva análise.
 Finalmente, no \autoref{chap.conclusao} são apresentadas
 as conclusões do trabalho.
 
@@ -107,7 +107,7 @@ as conclusões do trabalho.
 
 Para a criação do cliente foi utilizada essencialmente programação em Python (para isto foram utilizadas ferramentas como IDEs, nomeadamente o PyCharm, Geany e vim) e a interface do cliente foi concebida como uma aplicação web baseada em CherryPy.
 
-Antes da realização de qualquer programação o grupo reuniu-se e discutiu como deveria ser realizado o trabalho, que caminhos seguir até ao produto final. Foi optado ser realizada uma pequena base do cliente onde seria possível listar as caixas disponíveis no servidor, de seguida foram sendo adicionadas as funções de criar caixas, dar segurança às mesma, receber e enviar documentos às caixas. Finalmente a interface gráfica, mais apelativa ao utilizador foi introduzida. Antes de prosseguir, em cada etapa foram realizados testes para determinar erros ou falhas (em especial de segurança) para ser obtida uma experiência sem problemas ou crashes.
+Antes da realização de qualquer programação o grupo reuniu-se e discutiu como deveria ser realizado o trabalho, que caminhos seguir até ao produto final. Foi optado ser realizada uma pequena base do cliente onde seria possível listar as caixas disponíveis no servidor, de seguida foram sendo adicionadas as funções de criar caixas, dar segurança às mesma, receber e enviar documentos às caixas. Finalmente a interface gráfica, mais apelativa ao utilizador foi introduzida. Antes de prosseguir, em cada etapa foram realizados testes para determinar erros ou falhas (em especial de segurança) para ser obtida uma experiência sem problemas ou crashes. 
 
 \section{Descrição do cliente}
 \label{subs.desc}
@@ -135,21 +135,17 @@ Para segurança são utilizadas cifras assimétricas \ac{rsa} com chaves de 2048
 \subsection{Interface Web}
 Foi criada uma interface web para o cliente ser mais apelativo e de uso mais simples e familiar ao utilizador.
 
-\chapter{Resultados}
+\chapter{Resultados e Análise}
 \label{chap.resultados}
-Descreve os resultados obtidos.
 
-\chapter{Análise}
-\label{chap.analise}
-Analisa os resultados.
+Antes demais será de notar que o grupo fez o trabalho em conjunto com sucessivos commits no git. Inicialmente o trabalho começou a usar o GitHub devido a alguns problemas com a plataforma Code.UA
+
+
 
 \chapter{Conclusões}
 \label{chap.conclusao}
 Apresenta conclusões.
 
-\chapter*{Contribuições dos autores}
-
-%
 
 \chapter*{Acrónimos}
 \begin{acronym}
