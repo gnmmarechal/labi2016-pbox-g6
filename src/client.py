@@ -67,6 +67,13 @@ def prettyfy(element, separator):
 
 
 # Server functions
+def delete_message(box_name, (server_address, server_port), called_from_dms=False, signature="-1"):
+    get_message(box_name, (server_address, server_port), called_from_dms, signature)
+
+
+def delete_messages(box_name, (server_address, server_port), signature="-1"):
+    get_messages(box_name, (server_address, server_port), signature)
+
 
 def get_message(box_name, (server_address, server_port), called_from_gms=False, signature="-1"):
     msg = '{ "type": "GET", "name": "' + validate_string(box_name) + '", "timestamp":' + str(int(time.time())) + ', "sig": "' + signature + '"}\r\n'
