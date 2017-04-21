@@ -119,43 +119,38 @@ Nesta secção são apresentadas as funções do cliente e como foram adaptadas 
 
 
 \subsection{Criação de caixas}
-Esta função permite criar uma caixa através do envio da mensagem \textbf{CREATE}, a mensagem deverá conter o nome da caixa e o seu timestamp. Ainda é possível ter uma chave pública e assinatura da mensagem. Para oferecer segurança, se for optado por fornecer uma chave pública essa caixa só pode ser modificada com mensagens seguras.
-
+Esta função permite criar uma caixa através do envio da mensagem \textbf{CREATE}, a mensagem deverá conter o nome da caixa e o seu timestamp.
 
 \subsection{Envio de documentos para uma caixa}
 Para o envio de documentos para uma caixa é necessário o envio da mensagem \textbf{PUT} contendo uma mensagem de até 65536 octetos. Se a mensagem tiver mais que este comprimento, será cortada para ter a dimensão adequada.
 
 
 \subsection{Receção de um documento}
-A receção de um documento de uma certa caixa é realizado através da mensagem GET contendo o seu timestamp. Foram criadas funções que permitem obter a mensagem mais antiga no servidor, assim como duas implementações de uma função que permite obter todas as mensagens existentes de uma vez. Esta função pode ainda eliminar todas as mensagens existentes ou apenas uma, sendo chamada sem utilizar o valor devolvido, ou usando as duas funções que as chamam sem retornar valores.
-
-
-\section{Segurança}
-Para segurança são utilizadas cifras assimétricas \ac{rsa} com chaves de 2048 bits que são enviadas em formato \ac{pem}. Também são necessárias Assinaturas com chaves \ac{rsa} e sínteses{sha1}, sendo isto visível na criação de caixas e obtenção dos documentos numa caixa.
+A receção de um documento de uma certa caixa é realizado através da mensagem GET contendo o seu timestamp. Foram criadas funções que permitem obter a mensagem mais antiga no servidor, assim como duas implementações de uma função que permite obter todas as mensagens existentes de uma vez. Esta função pode ainda eliminar todas as mensagens existentes ou apenas uma, sendo chamada sem utilizar o valor devolvido, ou usando as duas funções que funcionam como seus pseudónimos.
 
 \section{Interface Web}
-Foi criada uma interface web para o cliente ser mais apelativo e de uso mais simples e familiar ao utilizador.
+Foi criada uma interface web para o cliente ser mais apelativo e de uso mais simples e familiar ao utilizador. Esta é baseada em HTML e é controlada pelo programa em Python através do CherryPy.
 
 \chapter{Resultados e Análise}
 \label{chap.res}
 
 Antes demais será de notar que o grupo fez o trabalho em conjunto com sucessivos commits no git. Inicialmente o trabalho começou a usar o GitHub devido a alguns problemas com a plataforma Code.UA. Acrescenta-se ainda que não foi possível implementar o nível de segurança.
 
-O produto final existe em duas formas: Exclusiva ao terminal e outra com interface gráfica. Note-se que é necessário o \textbf{Python 2.7} e dois módulos do mesmo sendo esses o \textbf{CherryPy} e \textbf{Colorama}. Podem ser obtidos a partir dos seguintes passos (Para Linux/GNU):
+O produto final existe em duas formas: Exclusiva ao terminal e outra com interface gráfica. Note-se que é necessário o \textbf{Python 2.7} e dois módulos do mesmo sendo esses o \textbf{CherryPy} e \textbf{Colorama}. Podem ser obtidos a partir dos seguintes passos (Para GNU/Linux):
 
 \begin{enumerate}
-\item apt-get install python 
+\item apt install python
 \item pip install colorama
-\item pip install cherrypy s n tuivers
+\item pip install cherrypy
 \end{enumerate}
 
 \textbf{NOTA}: Poderão ser necessárias permissões de administrador.
 
 \section{Terminal}
 
-Para aceder a esta forma, a que deverá consumir menos recursos ao computador, o utilizador deverá aceder ao ficheiro \textit{client.py} através do terminal de preferência.
+Para aceder a esta forma, a que deverá consumir menos recursos ao computador, o utilizador deverá aceder ao ficheiro \textit{client.py} através do terminal de preferência. Nos testes foram utilizados o Bash (em Ubuntu 16.10), o Bash on Ubuntu on Windows (para Windows 10) e o Windows CMD (em Windows 10).
 
-De seguida o utilizador pode introduzir o comando \textit{help} para obter informação do cliente e comandos para o uso deste. É possível ver e criar caixas tal como enviar, ler e apagar mensagens em caixas. Vistos que o comando \textit{list} mostra todas as listas disponíveis foi necessário implementar o comando \textit{clear} para limpar o terminal (sem fechar o cliente).
+De seguida o utilizador pode introduzir o comando \textit{help} para obter informação do cliente e comandos para o uso deste. É possível ver e criar caixas e ainda enviar, ler e apagar mensagens em caixas. Vistos que o comando \textit{list} mostra todas as listas disponíveis foi necessário implementar o comando \textit{cls} para limpar o terminal (sem fechar o cliente).
 
 Estão disponíveis vários comandos para a mesma função com fim a facilitar a tarefa ao utilizador.
 
@@ -193,7 +188,7 @@ A finalidade de utilizar esta forma é para fazer uma demonstração rápida do 
 \chapter{Conclusões}
 \label{chap.conc}
 
-Concluindo o trabalho, foi possível criar um cliente que consegue comunicar com funções de receber e enviar mensagens. Foram incorporados elementos aprendidos em Laboratórios de Informática, tais como: Programação em Python, aplicações web, testes e comunicação entre aplicações. A maior dificuldade no trabalho foi a implementação das cifras o que não foi possível.
+Concluindo o trabalho, foi possível criar um cliente que consegue comunicar com funções de receber e enviar mensagens. Foram incorporados elementos aprendidos em Laboratórios de Informática, tais como: Programação em Python, aplicações web, testes e comunicação entre aplicações. A maior dificuldade no trabalho foi a implementação das cifras o que acabou por não ser possível dentro do prazo.
 
 
 \chapter*{Acrónimos}
