@@ -8,6 +8,7 @@
 \usepackage[printonlyused]{acronym}
 \usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage{color}
 
 
 \begin{document}
@@ -95,25 +96,23 @@ Resumo do trabalho..............................................................
 O tema do seguinte trabalho é a criação de um programa cliente onde é possível realizar certas operações envolvendo a interação com um servidor.
 Este servidor contém um modelo de "boxes" com (ou sem) segurança onde é possível deixar mensagens de curto comprimento para consulta do seu criador. Todos os utilizadores têm possibilidade de criar uma \textbf{caixa} com um certo nome, também sendo possível existir uma chave pública ao servidor (no caso das caixas seguras). Além da criação de caixas, é possível \textbf{listar},\textbf{receber} e \textbf{enviar} mensagens para uma certa caixa.
 
-O documento encontra-se dividido em quatro capítulos.
-Sendo que no \autoref{chap.metodologia} é apresentada a metodologia seguida para a criação do cliente e
+O documento encontra-se dividido em quatro capítulos,
+sendo que no \autoref{chap.metodologia} é apresentada a metodologia seguida para a criação do cliente e
 as funções do mesmo.
-No \autoref{chap.resultados} são apresentados os resultados obtidos no cliente e a respetiva análise.
-Finalmente, no \autoref{chap.conclusao} são apresentadas
+No \autoref{chap.res} são apresentados os resultados obtidos no cliente e a respetiva análise.
+Finalmente, no \autoref{chap.conc} são apresentadas
 as conclusões do trabalho.
 
 \chapter{Metodologia}
 \label{chap.metodologia}
 
-Para a criação do cliente foi utilizada essencialmente programação em Python (para isto foram utilizadas ferramentas como IDEs, nomeadamente o PyCharm, Geany e vim) e a interface do cliente foi concebida como uma aplicação web baseada em CherryPy. O programa usa o intepretador Python 2.7.
+Para a criação do cliente foi utilizada essencialmente programação em Python (para isto foram utilizadas ferramentas como IDEs, nomeadamente o PyCharm, Geany e vim) e a interface do cliente foi concebida como uma aplicação web baseada em CherryPy.
 
 Antes da realização de qualquer programação o grupo reuniu-se e discutiu como deveria ser realizado o trabalho, que caminhos seguir até ao produto final. Foi optado ser realizada uma pequena base do cliente onde seria possível listar as caixas disponíveis no servidor, de seguida foram sendo adicionadas as funções de criar caixas, dar segurança às mesma, receber e enviar documentos às caixas. Finalmente a interface gráfica, mais apelativa ao utilizador foi introduzida. Antes de prosseguir, em cada etapa foram realizados testes para determinar erros ou falhas (em especial de segurança) para ser obtida uma experiência sem problemas ou crashes. 
 
 \section{Descrição do cliente}
 \label{subs.desc}
 Nesta secção são apresentadas as funções do cliente e como foram adaptadas ao mesmo.
-
-O cliente possui duas interfaces. Uma de texto, e uma web. A interface web usa o CherryPy. Para utilizar a primeira, deve-se iniciar o programa pelo ficheiro "client.py". Se se pretender utilizar a interface web, deve ser usado o "web_client.py".
 
 \subsection{Listagem}
 É pretendido listar todas as caixas seguras existentes através do envio de uma mensagem \textbf{LIST}, sendo que o servidor responderá com todas caixas seguras existentes e, caso existam, as chaves públicas das mesmas. Diversas funções foram concebidas para isto, para, por exemplo, obter o nome de todas as caixas, e mostrá-los ao utilizador.
@@ -128,25 +127,73 @@ Para o envio de documentos para uma caixa é necessário o envio da mensagem \te
 
 
 \subsection{Receção de um documento}
-A receção de um documento de uma certa caixa é realizado através da mensagem GET contendo o seu timestamp. Foram criadas funções que permitem obter a mensagem mais antiga no servidor, assim como duas implementações de uma função que permite obter todas as mensagens existentes de uma vez. Esta função pode ainda eliminar todas as mensagens existentes ou apenas uma, sendo chamada sem utilizar o valor devolvido, ou usando as duas funções que servem de pseudónimo.
+A receção de um documento de uma certa caixa é realizado através da mensagem GET contendo o seu timestamp. Foram criadas funções que permitem obter a mensagem mais antiga no servidor, assim como duas implementações de uma função que permite obter todas as mensagens existentes de uma vez. Esta função pode ainda eliminar todas as mensagens existentes ou apenas uma, sendo chamada sem utilizar o valor devolvido, ou usando as duas funções que as chamam sem retornar valores.
 
 
-\subsection{Segurança}
+\section{Segurança}
 Para segurança são utilizadas cifras assimétricas \ac{rsa} com chaves de 2048 bits que são enviadas em formato \ac{pem}. Também são necessárias Assinaturas com chaves \ac{rsa} e sínteses{sha1}, sendo isto visível na criação de caixas e obtenção dos documentos numa caixa.
 
-\subsection{Interface Web}
+\section{Interface Web}
 Foi criada uma interface web para o cliente ser mais apelativo e de uso mais simples e familiar ao utilizador.
 
 \chapter{Resultados e Análise}
-\label{chap.resultados}
+\label{chap.res}
 
 Antes demais será de notar que o grupo fez o trabalho em conjunto com sucessivos commits no git. Inicialmente o trabalho começou a usar o GitHub devido a alguns problemas com a plataforma Code.UA
 
+O produto final existe em duas formas: Exclusiva ao terminal e outra com interface gráfica. Note-se que é necessário o \textbf{Python} e dois módulos do mesmo sendo esses o \textbf{CherryPy} e \textbf{Colorama}. Podem ser obtidos a partir dos seguintes passos (Para Linux/GNU):
 
+\begin{enumerate}
+\item apt-get install python 
+\item pip install colorama
+\item pip install cherrypy s n tuivers
+\end{enumerate}
+
+\textbf{NOTA}: Poderão ser necessárias permissões de administrador.
+
+\section{Terminal}
+
+Para aceder a esta forma, a que deverá consumir menos recursos ao computador, o utilizador deverá aceder ao ficheiro \textit{client.py} através do terminal de preferência.
+
+De seguida o utilizador pode introduzir o comando \textit{help} para obter informação do cliente e comandos para o uso deste. É possível ver e criar caixas tal como enviar, ler e apagar mensagens em caixas. Vistos que o comando \textit{list} mostra todas as listas disponíveis foi necessário implementar o comando \textit{clear} para limpar o terminal (sem fechar o cliente).
+
+Estão disponíveis vários comandos para a mesma função com fim a facilitar a tarefa ao utilizador.
+
+Para executar um comando basta escrever o seu nome que será apresentada informação inicial requerida para a execução do mesmo.
+
+\textbf{Exemplo de uso:} 
+
+
+	\textit{create}	
+	
+	Box Name> \textit{Nome da Caixa}
+	
+	Creating new box "Nome da Caixa"...
+	
+	\textcolor{green}{Created box "Nome da Caixa" successfully!}
+	
+	\textit{list}	
+	
+	Getting information from the server...
+
+	Nomes das caixas
+	
+	Number of Boxes: xxxx
+	
+	\textit{clear}
+	
+
+\section{Interface}
+Para aceder à interface gráfica deverá ser executado o ficheiro \textit{$web_client.py$} 
+e de seguida abrir o browser de preferência com o link \textit{localhost:8080}. 
+Desta forma o utilizador obtém uma página simples no qual pode realizar as 4 operações focadas para este trabalho. 
+Esta interface web foi concebida em HTML para os visuais e aproveita os ficheiros \textit{.py} e \textit{.pyc} usados para o terminal. 
+A finalidade de utilizar esta forma é para fazer uma demonstração rápida do que o cliente consegue fazer de forma simpática ao utilizador.
 
 \chapter{Conclusões}
-\label{chap.conclusao}
-Apresenta conclusões.
+\label{chap.conc}
+
+Concluindo o trabalho, foi possível criar um cliente que consegue comunicar com funções de receber e enviar mensagens. Foram incorporados elementos aprendidos em Laboratórios de Informática, tais como: Programação em Python, aplicações web, testes e comunicação entre aplicações. A maior dificuldade no trabalho foi a implementação das cifras, vistos que foi realizada apenas no final.
 
 
 \chapter*{Acrónimos}
