@@ -68,6 +68,8 @@ def create_box(box_name, server_address, server_port, pubk=False, sig=False):  #
     sock.close()
     dic_reply = json.loads(reply)
     print reply
+    # {"content": "Box already exists", "timestamp": 1492735160, "code": "ERROR", "type": "RESULT"}
+    # {"timestamp": 1492735147, "code": "OK", "type": "RESULT"}
 
 
 def get_box_msg_number(box_name, box_list):
