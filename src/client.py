@@ -79,15 +79,15 @@ def show_help():
     print("PBox Client v" + app_version)
     print("\nAuthors: Mário Liberato & Jorge Oliveira\n")
     print("Available Commands:")
-    print("- list | list_boxes | lboxes - Lists and shows the number of existing boxes")
     print("- create | create_box | cbox - Creates a box")
-    print("- show_msg | read_msg | rmsg - Reads the oldest message from a box")
-    print("- show_msgs | read_msgs | rmsgs - Reads all messages from a box")
-    print("- send_msg | smsg - Sends a message to a box")
     print("- delete_msg | del_msg | dmsg - Deletes the oldest message from a box")
     print("- delete_msgs | del_msgs | dmsgs - Deletes all messages from a box")
-    print("- ver - Displays the version of the program")
     print("- help | man - Displays this text")
+    print("- list | list_boxes | lboxes - Lists and shows the number of existing boxes")
+    print("- send_msg | smsg - Sends a message to a box")
+    print("- show_msg | read_msg | rmsg - Reads the oldest message from a box")
+    print("- show_msgs | read_msgs | rmsgs - Reads all messages from a box")
+    print("- ver - Displays the version of the program")
 
 
 def show_delmsg():
