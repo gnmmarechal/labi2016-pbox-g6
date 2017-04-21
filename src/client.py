@@ -61,7 +61,7 @@ def validate_string(string, is_message=False):
 
     if is_message and len(string) > max_msg_size:
         chars_to_rem = len(string) - max_msg_size
-        string = string[:-chars_to_rem]
+        string = string[:-chars_to_rem]  # Trims messages to maximum size if they exceed it
     return string
 
 
@@ -73,9 +73,15 @@ def put_message(box_name, message, server_address, server_port):
     sock.send(msg.encode())
     reply = net_funcs.recv_all(sock).decode()
     sock.close()
+    # {"timestamp": 1492776513, "code": "OK", "type": "RESULT"}
     dic_reply = json.loads(reply)
-    print(reply)
 
+    if not len(dic_reply) == 3 and not dic_reply[u"code"] == "OK" and not dic_reply[u"type"] == "RESULT":
+        print(BColors.FAIL + "Error sending message." + BColors.ENDC)
+        return 1
+    else:
+        print(BColors.OKGREEN + "Message Sent! Timestamp: " + str(dic_reply[u"timestamp"]) + BColors.ENDC)
+        return 0
 
 def create_box(box_name, server_address, server_port, pubk="-1", sig="-1"):  # Creates a box, optional with security
     # SECURITY NOT IMPLEMENTED
