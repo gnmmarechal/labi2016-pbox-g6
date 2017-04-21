@@ -20,8 +20,49 @@ class PBoxClientWeb(object):
 
     @cherrypy.expose()
     def create_box(self):
-        retval = index + '<H1>Create Box</H1><form action="create_box_really" method="post"> Name: <input type="text" name="box_name" value=""> <p><input type="submit" value="Create Box"/></p> </form>'
+        retval = index + '<H1>Create Box</H1><form action="create_box_really" method="post"> Box Name: <input type="text" name="box_name" value=""> <p><input type="submit" value="Create Box"/></p> </form>'
         return retval
+
+    @cherrypy.expose()
+    def delete_msg(self):
+        retval = index + '<H1>Delete Oldest Message</H1><form action="delete_one" method="post"> Box Name: <input type="text" name="box_name" value=""> <p><input type="submit" value="Delete"/></p> </form> </BODY></HTML>'
+        return retval
+
+    @cherrypy.expose()
+    def delete_msgs(self):
+        retval = index + '<H1>Delete All Messages</H1><form action="delete_all" method="post"> Box Name: <input type="text" name="box_name" value=""> <p><input type="submit" value="Delete"/></p> </form> </BODY> </HTML>'
+        return retval
+
+    # Called by Input
+    @cherrypy.expose()
+    def delete_all(self, box_name=""):
+        if box_name.strip() == "":
+            return '<meta http-equiv="refresh" content="0; url=http://127.0.0.1:8080/delete_msgs" />'
+        else:
+            retval = index + "<H1>Message Deletion</H1>"
+            retcode = client.delete_messages(box_name.strip(), client.tgt_server)
+            if len(retcode) == 2:
+                retcode = retcode[0]
+            if retcode == (client.BColors.FAIL + "There is no such box!" + client.BColors.ENDC):
+                retval += "<P>The box\"" + box_name.strip() + "\"doesn't exist!</P> </BODY> </HTML>"
+            else:
+                retval += "<P>Deletion successful!</P> </BODY> </HTML>"
+            return retval
+
+    @cherrypy.expose()
+    def delete_one(self, box_name=""):
+        if box_name.strip() == "":
+            return '<meta http-equiv="refresh" content="0; url=http://127.0.0.1:8080/delete_msg" />'
+        else:
+            retval = index + "<H1>Message Deletion</H1>"
+            retcode = client.delete_message(box_name.strip(), client.tgt_server)
+            if len(retcode) == 2:
+                retcode = retcode[0]
+            if retcode == (client.BColors.FAIL + "There is no such box!" + client.BColors.ENDC):
+                retval += "<P>The box\"" + box_name.strip() + "\"doesn't exist!</P> </BODY> </HTML>"
+            else:
+                retval += "<P>Deletion successful!</P> </BODY> </HTML>"
+            return retval
 
     @cherrypy.expose()
     def create_box_really(self, box_name=""):
