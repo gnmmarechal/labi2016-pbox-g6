@@ -15,7 +15,7 @@ class PBoxClientWeb(object):
     @cherrypy.expose
     def list_boxes(self):
         box_list, box_names = client.set_list_and_names_nocolor(client.tgt_server)
-        retval = index + "<H1>Box List</H1><BR><B>" + "Number of Boxes: </B><P>" + str(client.get_box_number(box_list)) + '</P><BR><textarea name="Box List" cols="200" rows="30" readonly>' + box_names + '</textarea>'
+        retval = index + "<H1>Box List</H1><B>" + "Number of Boxes: </B><P>" + str(client.get_box_number(box_list)) + '</P><BR><textarea name="Box List" cols="200" rows="30" readonly>' + box_names + '</textarea>'
         return retval
 
     @cherrypy.expose()
@@ -28,7 +28,7 @@ class PBoxClientWeb(object):
         if box_name.strip() == "":
             return '<meta http-equiv="refresh" content="0; url=http://127.0.0.1:8080/create_box" />'
         else:
-            retval = index + "<H1>Box Creation</H1><BR>"
+            retval = index + "<H1>Box Creation</H1>"
             retcode = client.create_box(box_name.strip(), client.tgt_server)
             if retcode == "OK":
                 retval += '<P>Creation of box "' + box_name.strip() + '" successful!</P>'

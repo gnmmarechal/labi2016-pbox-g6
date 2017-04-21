@@ -105,13 +105,15 @@ as conclusões do trabalho.
 \chapter{Metodologia}
 \label{chap.metodologia}
 
-Para a criação do cliente foi utilizada essencialmente programação em Python (para isto foram utilizadas ferramentas como IDEs, nomeadamente o PyCharm, Geany e vim) e a interface do cliente foi concebida como uma aplicação web baseada em CherryPy.
+Para a criação do cliente foi utilizada essencialmente programação em Python (para isto foram utilizadas ferramentas como IDEs, nomeadamente o PyCharm, Geany e vim) e a interface do cliente foi concebida como uma aplicação web baseada em CherryPy. O programa usa o intepretador Python 2.7.
 
 Antes da realização de qualquer programação o grupo reuniu-se e discutiu como deveria ser realizado o trabalho, que caminhos seguir até ao produto final. Foi optado ser realizada uma pequena base do cliente onde seria possível listar as caixas disponíveis no servidor, de seguida foram sendo adicionadas as funções de criar caixas, dar segurança às mesma, receber e enviar documentos às caixas. Finalmente a interface gráfica, mais apelativa ao utilizador foi introduzida. Antes de prosseguir, em cada etapa foram realizados testes para determinar erros ou falhas (em especial de segurança) para ser obtida uma experiência sem problemas ou crashes. 
 
 \section{Descrição do cliente}
 \label{subs.desc}
 Nesta secção são apresentadas as funções do cliente e como foram adaptadas ao mesmo.
+
+O cliente possui duas interfaces. Uma de texto, e uma web. A interface web usa o CherryPy. Para utilizar a primeira, deve-se iniciar o programa pelo ficheiro "client.py". Se se pretender utilizar a interface web, deve ser usado o "web_client.py".
 
 \subsection{Listagem}
 É pretendido listar todas as caixas seguras existentes através do envio de uma mensagem \textbf{LIST}, sendo que o servidor responderá com todas caixas seguras existentes e, caso existam, as chaves públicas das mesmas. Diversas funções foram concebidas para isto, para, por exemplo, obter o nome de todas as caixas, e mostrá-los ao utilizador.
