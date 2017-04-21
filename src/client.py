@@ -2,6 +2,7 @@
 # encoding=utf-8
 import socket
 import time
+import os
 import json
 import sys
 import cherrypy
@@ -23,20 +24,29 @@ class BColors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-
+# Terminal-based Interface
 def main():
-    print("PBox Client\n")
-    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect(tgt_server)
-    print(sock.send('{"type":"LIST"}\r\n'.encode()))
-    rv = net_funcs.recv_all(sock).decode()
+    print("PBox Client v" + app_version + "\n")
 
-    sock.close()
+    print("\nEnter \"help\" to see all the available commands")
+    while True:
+        usr_input = raw_input(">")
 
-    print(rv)
+        # Parse user input
+        if usr_input == "quit" or usr_input == "exit":
+            break
+        if usr_input == "clear" or usr_input == "cls":
+            # This may not work on Windows if ANSI support is not enabled
+            os.system("cls")
+            sys.stderr.write("\x1b[2J\x1b[H")
+        else:
+            print(BColors.FAIL + "Error. Invalid command. Type \"help\" to see all available commands.\n" + BColors.ENDC)
+
+    sys.exit(0)
 
 
-def menu():
+# Other functions
+def menu():  # Testing Function, used during development to test functions
     print("PBox Client v" + app_version + "\n")
     box_list = get_box_list(tgt_server)
     box_names = []
@@ -275,4 +285,4 @@ class Actions(object):
 
 # cherrypy.quickstart(PBoxClient())
 
-menu()
+main()
