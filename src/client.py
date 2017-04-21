@@ -37,7 +37,7 @@ def main():
 
     print("\nEnter \"help\" to see all the available commands")
     while True:
-        usr_input = raw_input(">")
+        usr_input = raw_input(">").strip()
 
         # Parse user input
         if usr_input == "quit" or usr_input == "exit":
@@ -51,20 +51,63 @@ def main():
             # supports ANSI escape codes, to run the program. However, I've decided to keep this approach because it
             # was the cleaner of all the approaches I tried.
             sys.stderr.write(BColors.CLEAR)
-        elif usr_input == "list":
+        elif usr_input == "list" or usr_input == "list_boxes" or usr_input == "lboxes":
             show_list()
-        elif usr_input == "create":
+        elif usr_input == "create" or usr_input == "create_box" or usr_input == "cbox":
             show_create()
-        elif usr_input == "show_msg":
+        elif usr_input == "show_msg" or usr_input == "rmsg" or usr_input == "read_msg":
             show_showmsg1()
-        elif usr_input == "show_msgs":
+        elif usr_input == "show_msgs" or usr_input == "rmsgs" or usr_input == "read_msgs":
             show_showallmsg()
-        elif usr_input == "send_msg":
+        elif usr_input == "send_msg" or usr_input == "smsg":
             show_putmsg()
+        elif usr_input == "delete_msg" or usr_input == "del_msg" or usr_input == "dmsg":
+            show_delmsg()
+        elif usr_input == "delete_msgs" or usr_input == "del_msgs" or usr_input == "dmsgs":
+            show_delmsgs()
+        elif usr_input == "ver":
+            print(app_version)
+        elif usr_input == "help" or usr_input == "man":
+            show_help()
         else:
             print(BColors.FAIL + "Error. Invalid command. Type \"help\" to see all available commands.\n" + BColors.ENDC)
 
     sys.exit(0)
+
+
+def show_help():
+    print("PBox Client v" + app_version)
+    print("\nAuthors: Mário Liberato & Jorge Oliveira\n")
+    print("Available Commands:")
+    print("- list | list_boxes | lboxes - Lists and shows the number of existing boxes")
+    print("- create | create_box | cbox - Creates a box")
+    print("- show_msg | read_msg | rmsg - Reads the oldest message from a box")
+    print("- show_msgs | read_msgs | rmsgs - Reads all messages from a box")
+    print("- send_msg | smsg - Sends a message to a box")
+    print("- delete_msg | del_msg | dmsg - Deletes the oldest message from a box")
+    print("- delete_msgs | del_msgs | dmsgs - Deletes all messages from a box")
+    print("- ver - Displays the version of the program")
+    print("- help | man - Displays this text")
+
+
+def show_delmsg():
+    box_name = ""
+    while True:
+        box_name = raw_input("Box Name>")
+        if not box_name.strip() == "":
+            break
+    print("Deleting oldest message from \"" + box_name + "\"...")
+    delete_message(box_name, tgt_server)
+
+
+def show_delmsgs():
+    box_name = ""
+    while True:
+        box_name = raw_input("Box Name>")
+        if not box_name.strip() == "":
+            break
+    print("Deleting all messages from \"" + box_name + "\"...")
+    delete_messages(box_name, tgt_server)
 
 
 def show_putmsg():
@@ -198,7 +241,6 @@ def get_message(box_name, (server_address, server_port), called_from_gms=False, 
 
         else:
             print(BColors.FAIL + "Error requesting messages!" + BColors.ENDC)
-            print(reply)
             sys.exit(-1)
     else:
         return dic_reply[u"content"]
