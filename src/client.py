@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # encoding=utf-8
 import socket
 import time
@@ -53,15 +53,35 @@ def menu():
     print(BColors.BOLD + "Existing Boxes:\n" + BColors.ENDC + box_names + "\n")
     print(BColors.BOLD + "Number of Boxes: " + BColors.ENDC + str(get_box_number(box_list)))
 
-    create_box("84917_lolol", tgt_server[0], tgt_server[1])
+    put_message("84917_lolol", "Boas pessoal aqui estou com mais um video",tgt_server[0], tgt_server[1])
+
+
+# Other functions
+def validate_string(string, is_message = False)
+
+    if is_message and len(string) > max_msg_size:
+        chars_to_rem = len(string) - max_msg_size
+        string = string[:-chars_to_rem]
+    return string
 
 
 # Server functions
+def put_message(box_name, message, server_address, server_port):
+    msg = '{ "type": "PUT", "name": "' + validate_string(box_name) + '", "timestamp":' + str(int(time.time())) + ', "content": "' + validate_string(message) + '" }\r\n'
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((server_address, server_port))
+    sock.send(msg.encode())
+    reply = net_funcs.recv_all(sock).decode()
+    sock.close()
+    dic_reply = json.loads(reply)
+    print reply
+
+
 def create_box(box_name, server_address, server_port, pubk="-1", sig="-1"):  # Creates a box, optional with security
     # SECURITY NOT IMPLEMENTED
-    msg = '{ "type": "CREATE", "name": "' + box_name + '", "timestamp":' + str(int(time.time())) + ' }\r\n'
+    msg = '{ "type": "CREATE", "name": "' + validate_string(box_name) + '", "timestamp":' + str(int(time.time())) + ' }\r\n'
     if pubk != "-1" or sig != "-1":
-        msg = "{}"  # Not implemented
+        msg = '{ "type": "CREATE", "name": "' + validate_string(box_name) + '", timestamp":' + str(int(time.time())) + ', "pubk": "' + pubk + '", "sig": "' + sig + '" }\r\n'  # Not implemented
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((server_address, server_port))
     sock.send(msg.encode())
@@ -73,7 +93,7 @@ def create_box(box_name, server_address, server_port, pubk="-1", sig="-1"):  # C
     if len(dic_reply) == 3:  # Now check if the reply code is OK
         if dic_reply[u"type"] == "RESULT":
             if dic_reply[u"code"] == "OK":
-                print(BColors.OKGREEN + 'Created box "' + box_name + '" successfully!')
+                print(BColors.OKGREEN + 'Created box "' + validate_string(box_name) + '" successfully!')
                 return "OK"
             else:
                 print(BColors.FAIL + "Error." + BColors.ENDC)
@@ -96,7 +116,11 @@ def create_box(box_name, server_address, server_port, pubk="-1", sig="-1"):  # C
 
 
 def get_box_msg_number(box_name, box_list):
-    return box_list[u"payload"][get_box_index(box_name, box_list)][u"size"]
+    box_index = get_box_index(validate_string(box_name), box_list)
+    if box_index == -1:
+        print(BColors.FAIL + "Box doesn't exist!" + BColors.ENDC)
+
+    return box_list[u"payload"][box_index][u"size"]
 
 
 def get_box_index(box_name, box_list):
