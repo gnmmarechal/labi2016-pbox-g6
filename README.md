@@ -1,2 +1,6 @@
 # labi2016-pbox-g6
-Trabalho de LABI. Colocado aqui devido a problemas com o Code.UA
+Trabalho de LABI. 
+
+Relatório: tex-src/documento.pdf
+Projecto: src/client.py e src/web_client.py
+net_funcs.py contém apenas uma função genérica. 
