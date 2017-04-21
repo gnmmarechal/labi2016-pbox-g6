@@ -67,7 +67,7 @@ def validate_string(string, is_message = False)
 
 # Server functions
 def put_message(box_name, message, server_address, server_port):
-    msg = '{ "type": "PUT", "name": "' + validate_string(box_name) + '", "timestamp":' + str(int(time.time())) + ', "content": "' + validate_string(message) + '" }\r\n'
+    msg = '{ "type": "PUT", "name": "' + validate_string(box_name) + '", "timestamp":' + str(int(time.time())) + ', "content": "' + validate_string(message, True) + '" }\r\n'
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((server_address, server_port))
     sock.send(msg.encode())
