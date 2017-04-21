@@ -6,7 +6,6 @@ import socket
 import time
 # import os
 import json
-import cherrypy
 import net_funcs
 from colorama import init
 init()
@@ -14,7 +13,7 @@ init()
 if sys.version_info >= (3, 0):
     raise SystemExit('Please run this program using Python 2.7.')
 # Some values
-app_version = "0.2"
+app_version = "0.5.0"
 max_msg_size = 65536  # Maximum size of the message in octets
 tgt_server = "xcoa.av.it.pt", 8080  # Address/Hostname and port of the server
 
@@ -164,6 +163,15 @@ def show_list():
 
 
 # Other functions
+def set_list_and_names_nocolor(srv):
+    box_list = get_box_list(srv)
+    box_names = []
+    for box in box_list[u"payload"]:
+        box_names.append(box[u"name"])
+    box_names = prettyfy(box_names, "|| ")
+    return box_list, box_names
+
+
 def set_list_and_names(srv):
     box_list = get_box_list(srv)
     box_names = []
@@ -385,23 +393,6 @@ def get_box_list((server_address, server_port)):
         sys.exit(-1)
     return dic_reply
 
-
-# CherryPy Part of PBoxClient
-class PBoxClient(object):
-    def __init__(self):
-        self.actions = Actions()
-
-    @cherrypy.expose
-    def index(self):
-        return open("resources/index.html", "r").read()
-
-
-class Actions(object):
-    @cherrypy.expose
-    def doListBoxes(self):
-        return "<H1>Test</H1>"
-
-# cherrypy.quickstart(PBoxClient())
 
 if __name__ == "__main__":
     main()
