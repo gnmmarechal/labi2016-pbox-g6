@@ -68,8 +68,10 @@ def prettyfy(element, separator):
 
 # Server functions
 
-def get_message(box_name, (server_address, server_port), called_from_gms=False):
-    msg = '{ "type": "GET", "name": "' + validate_string(box_name) + '", "timestamp":' + str(int(time.time())) + "}\r\n"
+def get_message(box_name, (server_address, server_port), called_from_gms=False, signature="-1"):
+    msg = '{ "type": "GET", "name": "' + validate_string(box_name) + '", "timestamp":' + str(int(time.time())) + ', "sig": "' + signature + '"}\r\n'
+    if signature == "-1":
+        msg = '{ "type": "GET", "name": "' + validate_string(box_name) + '", "timestamp":' + str(int(time.time())) + "}\r\n"
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         sock.connect((server_address, server_port))
@@ -96,24 +98,24 @@ def get_message(box_name, (server_address, server_port), called_from_gms=False):
         return dic_reply[u"content"]
 
 
-def get_messages2(box_name, box_list, (server_address, server_port)):  # Second possible implementation of the function
+def get_messages2(box_name, box_list, (server_address, server_port), signature="-1"):  # Second possible implementation of the function
     # get_messages is used instead, as it doesn't need to update box_list to get all messages, as it doesn't rely
     # on that, and just fetches the messages directly, until it hits the end.
     return_messages = []
     msg_count = get_box_msg_number(box_name, box_list)
     if msg_count == 0:
-        return get_message(box_name, (server_address, server_port), True)[0]
+        return get_message(box_name, (server_address, server_port), True, signature)[0]
     c = 0
     while c < msg_count:
-        return_messages.append(get_message(box_name, (server_address, server_port), True))
+        return_messages.append(get_message(box_name, (server_address, server_port), True, signature))
         c += 1
     return return_messages
 
 
-def get_messages(box_name, (server_address, server_port)):
+def get_messages(box_name, (server_address, server_port), signature="-1"):
     return_messages = []
     while True:
-        message = get_message(box_name, (server_address, server_port), True)
+        message = get_message(box_name, (server_address, server_port), True, signature)
         if len(message) == 2:  # If two values are returned, that means the message is empty
             if return_messages == []:
                 return_messages.append(message[0])
