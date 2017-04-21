@@ -51,12 +51,23 @@ def menu():
     box_names = u', '.join(box_names).encode('utf-8').strip()
     print(BColors.BOLD + "Existing Boxes:\n" + BColors.ENDC + box_names + "\n")
     print(BColors.BOLD + "Number of Boxes: " + BColors.ENDC + str(get_box_number(box_list)))
-    print(get_box_index(u"abc", box_list))
+
+    create_box("84917_lolol", tgt_server[0], tgt_server[1])
 
 
 # Server functions
-def get_box_msg_number(box_name, box_list):
+def create_box(box_name, server_address, server_port):
+    msg = '{ "type": "CREATE", "name": "' + box_name + '", "timestamp":' + str(int(time.time())) + ' }\r\n'
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((server_address, server_port))
+    sock.send(msg.encode())
+    reply = net_funcs.recv_all(sock).decode()
+    sock.close()
+    # dic_reply = json.loads(reply)
+    print reply
 
+
+def get_box_msg_number(box_name, box_list):
     return box_list[u"payload"][get_box_index(box_name, box_list)][u"size"]
 
 
