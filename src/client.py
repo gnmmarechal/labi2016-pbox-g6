@@ -79,6 +79,7 @@ def show_help():
     print("PBox Client v" + app_version)
     print("\nAuthors: Mário Liberato & Jorge Oliveira\n")
     print("Available Commands:")
+    print("- cls - Clears the terminal")
     print("- create | create_box | cbox - Creates a box")
     print("- delete_msg | del_msg | dmsg - Deletes the oldest message from a box")
     print("- delete_msgs | del_msgs | dmsgs - Deletes all messages from a box")
@@ -398,24 +399,9 @@ class PBoxClient(object):
 class Actions(object):
     @cherrypy.expose
     def doListBoxes(self):
-        print("PBox Client v" + app_version + "\n")
-        box_list = get_box_list(tgt_server)
-        if box_list[u"code"] != "OK":
-            print("Server Reply Code: " + BColors.FAIL + str(box_list[u"code"]) + BColors.ENDC + '\n Expected "OK"')
-            sys.exit(-1)
-        if box_list[u"type"] != "RESULT":
-            print("Server Reply Type: " + BColors.FAIL + str(box_list[u"type"]) + BColors.ENDC + '\n Expected "RESULT"')
-            sys.exit(-1)
-
-        box_names = []
-        for box in box_list[u"payload"]:
-            box_names.append(box[u"name"])
-        box_names = u', '.join(box_names).encode('utf-8').strip()
-        print(BColors.BOLD + "Existing Boxes:\n" + BColors.ENDC + box_names + "\n")
-        print(BColors.BOLD + "Number of Boxes: " + BColors.ENDC + str(get_box_number(box_list)))
-        print(get_box_index(u"abc", box_list))
-        return box_names
+        return "<H1>Test</H1>"
 
 # cherrypy.quickstart(PBoxClient())
 
-main()
+if __name__ == "__main__":
+    main()
