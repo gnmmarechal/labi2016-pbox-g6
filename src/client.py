@@ -57,7 +57,7 @@ def menu():
 
 
 # Other functions
-def validate_string(string, is_message = False)
+def validate_string(string, is_message = False):
 
     if is_message and len(string) > max_msg_size:
         chars_to_rem = len(string) - max_msg_size
