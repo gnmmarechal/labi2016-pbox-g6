@@ -1,14 +1,18 @@
 #!/usr/bin/env python
 # encoding=utf-8
+# This program is to be ran with Python 2.7, as that was the interpreter used for testing.
+import sys
 import socket
 import time
 # import os
 import json
-import sys
 import cherrypy
 import net_funcs
 from colorama import init
 init()
+
+if sys.version_info >= (3, 0):
+    raise SystemExit('Please run this program using Python 2.7.')
 # Some values
 app_version = "0.2"
 max_msg_size = 65536  # Maximum size of the message in octets
@@ -26,6 +30,7 @@ class BColors:
     UNDERLINE = '\033[4m'
     CLEAR = '\x1b[2J\x1b[H'
 
+
 # Terminal-based Interface
 def main():
     print("PBox Client v" + app_version + "\n")
@@ -42,16 +47,88 @@ def main():
             # simple, and although using both os.system("cls") and sys.stderr.write("\x1b[2J\x1b[H") works on Windows
             # and Linux (using Bash, at least), it's a dirty solution. Not to mention that it doesn't always work properly.
             # Other codes like the ones used for coloured text will be messed up. Therefore, this approach was discarded.
-            # As such, colorama was used.
+            # As such, colorama was used. However, this brings issues if using something like PyCharm, which natively
+            # supports ANSI escape codes, to run the program. However, I've decided to keep this approach because it
+            # was the cleaner of all the approaches I tried.
             sys.stderr.write(BColors.CLEAR)
-
+        elif usr_input == "list":
+            show_list()
+        elif usr_input == "create":
+            show_create()
+        elif usr_input == "show_msg":
+            show_showmsg1()
+        elif usr_input == "show_msgs":
+            show_showallmsg()
+        elif usr_input == "send_msg":
+            show_putmsg()
         else:
             print(BColors.FAIL + "Error. Invalid command. Type \"help\" to see all available commands.\n" + BColors.ENDC)
 
     sys.exit(0)
 
 
+def show_putmsg():
+    box_name = ""
+    message = ""
+    while True:
+        box_name = raw_input("Box Name>")
+        if not box_name.strip() == "":
+            break
+    while True:
+        message = raw_input("Message>")
+        if not message.strip() == "":
+            break
+    print("Sending message to \"" + box_name + "\"...")
+    put_message(box_name, message, tgt_server)
+
+
+def show_showallmsg():
+    box_name = ""
+    while True:
+        box_name = raw_input("Box Name>")
+        if not box_name.strip() == "":
+            break
+    print("Requesting all messages from \"" + box_name + "\"...")
+    print("Messages:\n" + prettyfy(get_messages(box_name, tgt_server), "\n"))
+
+
+def show_showmsg1():
+    box_name = ""
+    while True:
+        box_name = raw_input("Box Name>")
+        if not box_name.strip() == "":
+            break
+    print("Requesting oldest message from \"" + box_name + "\"...")
+    print(get_message(box_name, tgt_server))
+
+
+def show_create():
+    box_name = ""
+    while True:
+        box_name = raw_input("Box Name>")
+        if not box_name.strip() == "":
+            break
+    print("Creating new box \"" + box_name + "\"...")
+    create_box(box_name, tgt_server)
+
+
+def show_list():
+    print("Getting information from the server...")
+    box_list, box_names = set_list_and_names(tgt_server)
+    print(BColors.BOLD + "Existing Boxes:\n" + BColors.ENDC + box_names + "\n")
+    print(BColors.BOLD + "Number of Boxes: " + BColors.ENDC + str(get_box_number(box_list)))
+
+
 # Other functions
+def set_list_and_names(srv):
+    box_list = get_box_list(srv)
+    box_names = []
+    for box in box_list[u"payload"]:
+        box_names.append(box[u"name"])
+    box_names = prettyfy(box_names, BColors.OKBLUE + ", " + BColors.ENDC)
+    return box_list, box_names
+
+
 def menu():  # Testing Function, used during development to test functions
     print("PBox Client v" + app_version + "\n")
     box_list = get_box_list(tgt_server)
@@ -114,8 +191,14 @@ def get_message(box_name, (server_address, server_port), called_from_gms=False, 
             if not called_from_gms:
                 return BColors.FAIL + "There are no messages in the box!" + BColors.ENDC
             return BColors.FAIL + "There are no messages in the box!" + BColors.ENDC, 1  # Returns 1 as exit code
+        elif dic_reply[u"content"] == "Box not found" and dic_reply[u"code"] == "ERROR":
+            if not called_from_gms:
+                return BColors.FAIL + "There is no such box!" + BColors.ENDC
+            return BColors.FAIL + "There is no such box!" + BColors.ENDC, 2  # Returns 2 as exit code
+
         else:
-            print(BColors.FAIL + "Unknown error!" + BColors.ENDC)
+            print(BColors.FAIL + "Error requesting messages!" + BColors.ENDC)
+            print(reply)
             sys.exit(-1)
     else:
         return dic_reply[u"content"]
@@ -139,7 +222,7 @@ def get_messages(box_name, (server_address, server_port), signature="-1"):
     return_messages = []
     while True:
         message = get_message(box_name, (server_address, server_port), True, signature)
-        if len(message) == 2:  # If two values are returned, that means the message is empty
+        if len(message) == 2:  # If two values are returned, that means the message is empty or box not found
             if return_messages == []:
                 return_messages.append(message[0])
             break
@@ -192,7 +275,7 @@ def create_box(box_name, (server_address, server_port), pubk="-1", sig="-1"):  #
     if len(dic_reply) == 3:  # Now check if the reply code is OK
         if dic_reply[u"type"] == "RESULT":
             if dic_reply[u"code"] == "OK":
-                print(BColors.OKGREEN + 'Created box "' + validate_string(box_name) + '" successfully!')
+                print(BColors.OKGREEN + 'Created box "' + validate_string(box_name) + '" successfully!' + BColors.ENDC)
                 return "OK"
             else:
                 print(BColors.FAIL + "Error." + BColors.ENDC)
@@ -202,10 +285,12 @@ def create_box(box_name, (server_address, server_port), pubk="-1", sig="-1"):  #
             sys.exit(-1)
     elif len(dic_reply) == 4:  # Checking content of error message
         if dic_reply[u"code"] == "ERROR":
-            print(BColors.FAIL + "Error Message:" + BColors.ENDC)
-            print(dic_reply[u"content"])
+            print(BColors.FAIL + "Error!")
+            print(dic_reply[u"content"] + "!" + BColors.ENDC)
             if not dic_reply[u"content"] == "Box already exists":  # If the error is not the expected one, quit
                 sys.exit(-1)
+            else:
+                return "ERR_EXISTS"
         else:
             print(BColors.FAIL + "Unknown Error." + BColors.ENDC)
             sys.exit(-1)
