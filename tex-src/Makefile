@@ -2,7 +2,7 @@
 
 all: documento.pdf
 
-documento.pdf: documento.tex bibliografia.bib
+documento.pdf: documento.tex
 	pdflatex documento.tex
 	biber documento
 	pdflatex documento.tex

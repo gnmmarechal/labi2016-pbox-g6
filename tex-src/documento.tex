@@ -17,7 +17,7 @@
 \def\titulo{PBOX Client}
 \def\data{21-04-2017}
 \def\autores{Mário Liberato, Jorge Oliveira}
-\def\autorescontactos{(nmec) mario@ua.pt, (84983) jorge.am.oliveira@ua.pt}
+\def\autorescontactos{(84917) mliberato@ua.pt, (84983) jorge.am.oliveira@ua.pt}
 \def\departamento{DETI}
 \def\curso{MIECT}
 \def\logotipo{ua.pdf}
@@ -92,29 +92,29 @@ Resumo do trabalho..............................................................
 \chapter{Introdução}
 \label{chap.introducao} %ADD AUTO REFS para CRIAR, LISTAR, ENVIAR e RECEBER
 
-O tema do seguinte trabalho é a criação de um cliente onde é possível realizar certas operações com um servidor.
-Este servidor contém um modelo de "boxes" com (ou sem) segurança onde é possível deixar comentário de curto comprimento para consulta do seu criador. Todos os utilizadores têm possibilidade de criar uma \textbf{caixa} com um certo nome, também sendo possível existir uma chave pública ao servidor. Além da criação de caixas, é possível \textbf{listar},\textbf{receber} e \textbf{enviar} documentos para uma certa caixa.
+O tema do seguinte trabalho é a criação de um programa cliente onde é possível realizar certas operações envolvendo a interação com um servidor.
+Este servidor contém um modelo de "boxes" com (ou sem) segurança onde é possível deixar mensagens de curto comprimento para consulta do seu criador. Todos os utilizadores têm possibilidade de criar uma \textbf{caixa} com um certo nome, também sendo possível existir uma chave pública ao servidor (no caso das caixas seguras). Além da criação de caixas, é possível \textbf{listar},\textbf{receber} e \textbf{enviar} mensagens para uma certa caixa.
 
 O documento encontra-se dividido em cinco capítulos.
 Sendo que no \autoref{chap.metodologia} é apresentada a metodologia seguida para a criação do cliente e
 as funções do mesmo.
-No \autoref{chap.resultados} são apresentados os resultados óbtidos no cliente e na \autoref{chap.analise} a análise dos resultados.
+No \autoref{chap.resultados} são apresentados os resultados btidos no cliente e na \autoref{chap.analise} a análise dos resultados.
 Finalmente, no \autoref{chap.conclusao} são apresentadas
 as conclusões do trabalho.
 
 \chapter{Metodologia}
 \label{chap.metodologia}
 
-Para a criação do cliente foi utilizada essencialmente programação em Python (para isto foi utilizado o PyCharm) e a interface do cliente foi adaptada em web.
+Para a criação do cliente foi utilizada essencialmente programação em Python (para isto foram utilizadas ferramentas como IDEs, nomeadamente o PyCharm, Geany e vim) e a interface do cliente foi concebida como uma aplicação web baseada em CherryPy.
 
-Antes da realização de qualquer programação o grupo reuniu-se e discutiu como deveria ser realizado o trabalho, que caminhos seguir até ao produto final. Foi optado ser realizado uma pequena base do cliente onde seria possível listar as caixas disponíveis no servidor, de seguida foram sendo adicionadas as funções de criar caixas, dar segurança às mesma, receber e enviar documentos às caixas. Finalmente a interface gráfica e apelativa ao utilizador foi introduzida. Antes de prosseguir em cada etapa foram realizados testes para determinar erros ou falhas (em especial de segurança) para ser obtida uma experiência sem problemas.
+Antes da realização de qualquer programação o grupo reuniu-se e discutiu como deveria ser realizado o trabalho, que caminhos seguir até ao produto final. Foi optado ser realizada uma pequena base do cliente onde seria possível listar as caixas disponíveis no servidor, de seguida foram sendo adicionadas as funções de criar caixas, dar segurança às mesma, receber e enviar documentos às caixas. Finalmente a interface gráfica, mais apelativa ao utilizador foi introduzida. Antes de prosseguir, em cada etapa foram realizados testes para determinar erros ou falhas (em especial de segurança) para ser obtida uma experiência sem problemas ou crashes.
 
 \section{Descrição do cliente}
 \label{subs.desc}
-Nesta secção são apresentadas as funções do cliente e como foram adaptadas para o mesmo.
+Nesta secção são apresentadas as funções do cliente e como foram adaptadas ao mesmo.
 
 \subsection{Listagem}
-É pretendido listar todas as caixas seguras existentes através do envio de uma mensagem \textbf{LIST}, sendo que o servidor responderá com todas caixas seguras existentes e, caso existam, as chaves públicas das mesmas.
+É pretendido listar todas as caixas seguras existentes através do envio de uma mensagem \textbf{LIST}, sendo que o servidor responderá com todas caixas seguras existentes e, caso existam, as chaves públicas das mesmas. Diversas funções foram concebidas para isto, para, por exemplo, obter o nome de todas as caixas, e mostrá-los ao utilizador.
 
 
 \subsection{Criação de caixas}
@@ -122,18 +122,18 @@ Esta função permite criar uma caixa através do envio da mensagem \textbf{CREA
 
 
 \subsection{Envio de documentos para uma caixa}
-Para o envio de documentos para uma caixa é necessário o envio da mensagem \textbf{PUT} contendo um texto
+Para o envio de documentos para uma caixa é necessário o envio da mensagem \textbf{PUT} contendo uma mensagem de até 65536 octetos. Se a mensagem tiver mais que este comprimento, será cortada para ter a dimensão adequada.
 
 
 \subsection{Receção de um documento}
-A receção de um documento de uma certa caixa é realizado através da mensagem GET contendo o seu timestamp.
+A receção de um documento de uma certa caixa é realizado através da mensagem GET contendo o seu timestamp. Foram criadas funções que permitem obter a mensagem mais antiga no servidor, assim como duas implementações de uma função que permite obter todas as mensagens existentes de uma vez. Uma variante desta função foi ainda criada para eliminar todas as mensagens existentes.
 
 
 \subsection{Segurança}
-Para segurança são utilizadas cifras Assimétricas \ac{rsa} com chaves de 2048 bits que são enviadas em formato \ac{pem}. Também são necessárias Assinaturas com chaves \ac{rsa} e sínteses{sha1}, sendo isto visível na criação de caixas e obtenção dos documentos numa caixa.
+Para segurança são utilizadas cifras assimétricas \ac{rsa} com chaves de 2048 bits que são enviadas em formato \ac{pem}. Também são necessárias Assinaturas com chaves \ac{rsa} e sínteses{sha1}, sendo isto visível na criação de caixas e obtenção dos documentos numa caixa.
 
 \subsection{Interface Web}
-Foi optado realizar uma interface web para o cliente ser mais apelativo e de uso simples ao utilizador
+Foi criada uma interface web para o cliente ser mais apelativo e de uso mais simples e familiar ao utilizador.
 
 \chapter{Resultados}
 \label{chap.resultados}
