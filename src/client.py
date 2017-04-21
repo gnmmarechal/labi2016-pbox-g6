@@ -2,14 +2,15 @@
 # encoding=utf-8
 import socket
 import time
-import os
+# import os
 import json
 import sys
 import cherrypy
 import net_funcs
-
+from colorama import init
+init()
 # Some values
-app_version = "0.1"
+app_version = "0.2"
 max_msg_size = 65536  # Maximum size of the message in octets
 tgt_server = "xcoa.av.it.pt", 8080  # Address/Hostname and port of the server
 
@@ -23,6 +24,7 @@ class BColors:
     ENDC = '\033[0m'
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
+    CLEAR = '\x1b[2J\x1b[H'
 
 # Terminal-based Interface
 def main():
@@ -36,9 +38,13 @@ def main():
         if usr_input == "quit" or usr_input == "exit":
             break
         if usr_input == "clear" or usr_input == "cls":
-            # This may not work on Windows if ANSI support is not enabled
-            os.system("cls")
-            sys.stderr.write("\x1b[2J\x1b[H")
+            #os.system("cls")  # Windows command :/. Detecting whether a terminal supports ANSI escape codes is not that
+            # simple, and although using both os.system("cls") and sys.stderr.write("\x1b[2J\x1b[H") works on Windows
+            # and Linux (using Bash, at least), it's a dirty solution. Not to mention that it doesn't always work properly.
+            # Other codes like the ones used for coloured text will be messed up. Therefore, this approach was discarded.
+            # As such, colorama was used.
+            sys.stderr.write(BColors.CLEAR)
+
         else:
             print(BColors.FAIL + "Error. Invalid command. Type \"help\" to see all available commands.\n" + BColors.ENDC)
 
