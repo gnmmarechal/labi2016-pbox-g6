@@ -126,7 +126,7 @@ Para o envio de documentos para uma caixa é necessário o envio da mensagem \te
 
 
 \subsection{Receção de um documento}
-A receção de um documento de uma certa caixa é realizado através da mensagem GET contendo o seu timestamp. Foram criadas funções que permitem obter a mensagem mais antiga no servidor, assim como duas implementações de uma função que permite obter todas as mensagens existentes de uma vez. Uma variante desta função foi ainda criada para eliminar todas as mensagens existentes.
+A receção de um documento de uma certa caixa é realizado através da mensagem GET contendo o seu timestamp. Foram criadas funções que permitem obter a mensagem mais antiga no servidor, assim como duas implementações de uma função que permite obter todas as mensagens existentes de uma vez. Esta função pode ainda eliminar todas as mensagens existentes ou apenas uma, sendo chamada sem utilizar o valor devolvido, ou usando as duas funções que as chamam sem retornar valores.
 
 
 \subsection{Segurança}
