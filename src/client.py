@@ -23,6 +23,7 @@ class BColors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
+
 def main():
     print("PBox Client\n")
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -56,10 +57,10 @@ def menu():
 
 
 # Server functions
-def create_box(box_name, server_address, server_port, pubk=False, sig=False):  # Creates a box, optional with security
+def create_box(box_name, server_address, server_port, pubk="-1", sig="-1"):  # Creates a box, optional with security
     # SECURITY NOT IMPLEMENTED
     msg = '{ "type": "CREATE", "name": "' + box_name + '", "timestamp":' + str(int(time.time())) + ' }\r\n'
-    if not pubk or not sig:
+    if pubk != "-1" or sig != "-1":
         msg = "{}"  # Not implemented
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((server_address, server_port))
@@ -67,9 +68,31 @@ def create_box(box_name, server_address, server_port, pubk=False, sig=False):  #
     reply = net_funcs.recv_all(sock).decode()
     sock.close()
     dic_reply = json.loads(reply)
-    print reply
     # {"content": "Box already exists", "timestamp": 1492735160, "code": "ERROR", "type": "RESULT"}
     # {"timestamp": 1492735147, "code": "OK", "type": "RESULT"}
+    if len(dic_reply) == 3:  # Now check if the reply code is OK
+        if dic_reply[u"type"] == "RESULT":
+            if dic_reply[u"code"] == "OK":
+                print(BColors.OKGREEN + 'Created box "' + box_name + '" successfully!')
+                return "OK"
+            else:
+                print(BColors.FAIL + "Error." + BColors.ENDC)
+                exit(-1)
+        else:
+            print(BColors.FAIL + "Unknown Error." + BColors.ENDC)
+            exit(-1)
+    elif len(dic_reply) == 4:  # Checking content of error message
+        if dic_reply[u"code"] == "ERROR":
+            print(BColors.FAIL + "Error Message:" + BColors.ENDC)
+            print(dic_reply[u"content"])
+            if not dic_reply[u"content"] == "Box already exists":  # If the error is not the expected one, quit
+                exit(-1)
+        else:
+            print(BColors.FAIL + "Unknown Error." + BColors.ENDC)
+            exit(-1)
+    else:
+        print(BColors.FAIL + "Unknown Error." + BColors.ENDC)
+        exit(-1)
 
 
 def get_box_msg_number(box_name, box_list):
