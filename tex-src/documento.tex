@@ -1,0 +1,168 @@
+\documentclass{report}
+\usepackage[T1]{fontenc} 
+\usepackage[utf8]{inputenc} 
+\usepackage[backend=biber, style=ieee]{biblatex} 
+\usepackage{csquotes}
+\usepackage[portuguese]{babel}
+\usepackage{blindtext}
+\usepackage[printonlyused]{acronym}
+\usepackage{hyperref}
+\usepackage{graphicx}
+
+
+\begin{document}
+%
+% Settings
+%
+\def\titulo{PBOX Client}
+\def\data{21-04-2017}
+\def\autores{Mário Liberato, Jorge Oliveira}
+\def\autorescontactos{(nmec) mario@ua.pt, (84983) jorge.am.oliveira@ua.pt}
+\def\departamento{DETI}
+\def\curso{MIECT}
+\def\logotipo{ua.pdf}
+%
+%CAPA %
+%
+\begin{titlepage}
+
+\begin{center}
+%
+\vspace*{50mm}
+%
+{\Huge \titulo}\\ 
+%
+\vspace{10mm}
+%
+{\Large \curso}\\
+%
+\vspace{10mm}
+%
+{\LARGE \autores}\\ 
+%
+\vspace{30mm}
+%
+\begin{figure}[h]
+\center
+\includegraphics{\logotipo}
+\end{figure}
+%
+\vspace{30mm}
+\end{center}
+%
+\end{titlepage}
+
+% Pag Titulo %
+\title{%
+{\Huge\textbf{\titulo}}\\
+{\Large \departamento\\ \curso}
+}
+%
+\author{%
+    \autores \\
+    \autorescontactos
+}
+%
+\date{\data}
+%
+\maketitle
+
+\pagenumbering{roman}
+
+%RESUMO%
+\begin{abstract}
+Resumo do trabalho..........................................................................
+\end{abstract}
+
+% Agradecimentos %
+%\renewcommand{\abstractname}{Agradecimentos}
+%\begin{abstract}
+%\end{abstract}
+%Não existem agradecimentos para este relatório
+
+\tableofcontents
+% \listoftables     
+% \listoffigures    
+
+
+%
+\clearpage
+\pagenumbering{arabic} %Numeracao fica a direita
+%
+\chapter{Introdução}
+\label{chap.introducao} %ADD AUTO REFS para CRIAR, LISTAR, ENVIAR e RECEBER
+
+O tema do seguinte trabalho é a criação de um cliente onde é possível realizar certas operações com um servidor.
+Este servidor contém um modelo de "boxes" com (ou sem) segurança onde é possível deixar comentário de curto comprimento para consulta do seu criador. Todos os utilizadores têm possibilidade de criar uma \textbf{caixa} com um certo nome, também sendo possível existir uma chave pública ao servidor. Além da criação de caixas, é possível \textbf{listar},\textbf{receber} e \textbf{enviar} documentos para uma certa caixa.
+
+O documento encontra-se dividido em cinco capítulos.
+Sendo que no \autoref{chap.metodologia} é apresentada a metodologia seguida para a criação do cliente e
+as funções do mesmo.
+No \autoref{chap.resultados} são apresentados os resultados óbtidos no cliente e na \autoref{chap.analise} a análise dos resultados.
+Finalmente, no \autoref{chap.conclusao} são apresentadas
+as conclusões do trabalho.
+
+\chapter{Metodologia}
+\label{chap.metodologia}
+
+Para a criação do cliente foi utilizada essencialmente programação em Python (para isto foi utilizado o PyCharm) e a interface do cliente foi adaptada em web.
+
+Antes da realização de qualquer programação o grupo reuniu-se e discutiu como deveria ser realizado o trabalho, que caminhos seguir até ao produto final. Foi optado ser realizado uma pequena base do cliente onde seria possível listar as caixas disponíveis no servidor, de seguida foram sendo adicionadas as funções de criar caixas, dar segurança às mesma, receber e enviar documentos às caixas. Finalmente a interface gráfica e apelativa ao utilizador foi introduzida. Antes de prosseguir em cada etapa foram realizados testes para determinar erros ou falhas (em especial de segurança) para ser obtida uma experiência sem problemas.
+
+\section{Descrição do cliente}
+\label{subs.desc}
+Nesta secção são apresentadas as funções do cliente e como foram adaptadas para o mesmo.
+
+\subsection{Listagem}
+É pretendido listar todas as caixas seguras existentes através do envio de uma mensagem \textbf{LIST}, sendo que o servidor responderá com todas caixas seguras existentes e, caso existam, as chaves públicas das mesmas.
+
+
+\subsection{Criação de caixas}
+Esta função permite criar uma caixa através do envio da mensagem \textbf{CREATE}, a mensagem deverá conter o nome da caixa e o seu timestamp. Ainda é possível ter uma chave pública e assinatura da mensagem. Para oferecer segurança, se for optado por fornecer uma chave pública essa caixa só pode ser modificada com mensagens seguras.
+
+
+\subsection{Envio de documentos para uma caixa}
+Para o envio de documentos para uma caixa é necessário o envio da mensagem \textbf{PUT} contendo um texto
+
+
+\subsection{Receção de um documento}
+A receção de um documento de uma certa caixa é realizado através da mensagem GET contendo o seu timestamp.
+
+
+\subsection{Segurança}
+Para segurança são utilizadas cifras Assimétricas \ac{rsa} com chaves de 2048 bits que são enviadas em formato \ac{pem}. Também são necessárias Assinaturas com chaves \ac{rsa} e sínteses{sha1}, sendo isto visível na criação de caixas e obtenção dos documentos numa caixa.
+
+\subsection{Interface Web}
+Foi optado realizar uma interface web para o cliente ser mais apelativo e de uso simples ao utilizador
+
+\chapter{Resultados}
+\label{chap.resultados}
+Descreve os resultados obtidos.
+
+\chapter{Análise}
+\label{chap.analise}
+Analisa os resultados.
+
+\chapter{Conclusões}
+\label{chap.conclusao}
+Apresenta conclusões.
+
+\chapter*{Contribuições dos autores}
+
+%
+
+\chapter*{Acrónimos}
+\begin{acronym}
+ \acro{ua}[UA]{Universidade de Aveiro}
+ \acro{deti}[DETI]{Departamento de Electrónica, Telecomunicações e Informática}
+ \acro{miect}[MIECT]{Mestrado Integrado em Engenharia de Computadores e Telemática}
+ \acro{rsa}[RSA]{Rivest Shamir Adleman, Iniciais dos apelidos dos fundadores deste algorítmo de criptografia}
+ \acro{pem}[PEM]{Privacy-enhanced Electronic Mail}
+ \acro{sha1}[SHA1]{Função hash criptográfica}
+\end{acronym}
+
+
+%
+%\printbibliography
+
+\end{document}
