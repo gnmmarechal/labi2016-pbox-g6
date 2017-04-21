@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # encoding=utf-8
 import socket
 import time
@@ -53,11 +53,11 @@ def menu():
     print(BColors.BOLD + "Existing Boxes:\n" + BColors.ENDC + box_names + "\n")
     print(BColors.BOLD + "Number of Boxes: " + BColors.ENDC + str(get_box_number(box_list)))
 
-    put_message("84917_lolol", "Boas pessoal aqui estou com mais um video",tgt_server[0], tgt_server[1])
+    put_message("84917_lolol", "Boas pessoal aqui estou com mais um video", tgt_server[0], tgt_server[1])
 
 
 # Other functions
-def validate_string(string, is_message = False):
+def validate_string(string, is_message=False):
 
     if is_message and len(string) > max_msg_size:
         chars_to_rem = len(string) - max_msg_size
@@ -74,7 +74,7 @@ def put_message(box_name, message, server_address, server_port):
     reply = net_funcs.recv_all(sock).decode()
     sock.close()
     dic_reply = json.loads(reply)
-    print reply
+    print(reply)
 
 
 def create_box(box_name, server_address, server_port, pubk="-1", sig="-1"):  # Creates a box, optional with security
